@@ -1,0 +1,17 @@
+/vendor/
+/node_modules/
+/public/storage/
+/storage/*.key
+/.env
+/.env.backup
+/.idea/
+/.vscode/
+/_ide_helper.php
+/_ide_helper_models.php
+/phpunit.xml
+/.phpunit.result.cache
+Homestead.yaml
+Homestead.json
+/.vagrant/
+/.DS_Store
+/.env.testing
