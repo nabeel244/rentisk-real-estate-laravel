@@ -8,7 +8,6 @@
     $languages = App\Models\Language::all();
 @endphp
 
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -86,7 +85,7 @@
         <noscript><img height="1" width="1" style="display:none"
                 src="https://www.facebook.com/tr?id={{ $facebookPixel->app_id }}&ev=PageView&noscript=1" /></noscript>
     @endif
-
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD3cBzlfdK8yX-rwUiixhHfbDS7ORfmX2o&callback=initMap" async defer></script>
 
     @include('theme_style')
 
@@ -140,7 +139,7 @@
     <nav class="navbar navbar-expand-lg main_menu">
         <div class="container">
             <a class="navbar-brand" href="{{ route('home') }}">
-                <img src="{{ url($setting->logo) }}" alt="logo" class="img-fluid w-100">
+                <img src="{{ url($setting->logo) }}" alt="logo" class="img-fluid" style="height: 49% !important; width: 50% !important;">
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
@@ -237,12 +236,12 @@
                                 @php
                                     $menu = $menus->where('id', 8)->first();
                                 @endphp
-                                @if ($menu->status == 1)
+                                {{-- @if ($menu->status == 1)
                                     <li>
                                         <a class="dropdown-item {{ Route::is('agents') ? 'active' : '' }}"
                                             href="{{ route('agents') }}">{{ $menu->translated_custom_name }}</a>
                                     </li>
-                                @endif
+                                @endif --}}
 
 
                             </ul>
@@ -253,12 +252,12 @@
                     @php
                         $menu = $menus->where('id', 10)->first();
                     @endphp
-                    @if ($menu->status == 1)
+                    {{-- @if ($menu->status == 1)
                         <li class="nav-item">
                             <a class="nav-link {{ Route::is('pricing.plan') ? 'active' : '' }}"
                                 href="{{ route('pricing.plan') }}">{{ $menu->translated_custom_name }}</a>
                         </li>
-                    @endif
+                    @endif --}}
 
                     @php
                         $menu = $menus->where('id', 9)->first();
@@ -284,10 +283,10 @@
                                 @php
                                     $menu = $menus->where('id', 14)->first();
                                 @endphp
-                                @if ($menu->status == 1)
+                                {{-- @if ($menu->status == 1)
                                     <li><a class="dropdown-item {{ Route::is('career') || Route::is('show-career') ? 'active' : '' }}"
                                             href="{{ route('career') }}">{{ $menu->translated_custom_name }}</a></li>
-                                @endif
+                                @endif --}}
 
                                 @php
                                     $menu = $menus->where('id', 12)->first();
@@ -299,13 +298,13 @@
                                     </li>
                                 @endif
 
-                                @if ($customPages->count() != 0)
+                                {{-- @if ($customPages->count() != 0)
                                     @foreach ($customPages as $custom_item)
                                         <li><a class="dropdown-item {{ Request::url() == route('custom.page', $custom_item->slug) ? 'active' : '' }}"
                                                 href="{{ route('custom.page', $custom_item->slug) }}">{{ $custom_item->translated_page_name }}</a>
                                         </li>
                                     @endforeach
-                                @endif
+                                @endif --}}
                             </ul>
                         </li>
 
@@ -351,7 +350,20 @@
 
 
     @if ($tawk_chat->status == 1)
-        <script type="text/javascript">
+    <!--Start of Tawk.to Script-->
+<script type="text/javascript">
+    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+    (function(){
+    var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+    s1.async=true;
+    s1.src='https://embed.tawk.to/66045fd6a0c6737bd1258698/1hq0khb6k';
+    s1.charset='UTF-8';
+    s1.setAttribute('crossorigin','*');
+    s0.parentNode.insertBefore(s1,s0);
+    })();
+    </script>
+    <!--End of Tawk.to Script-->
+        {{-- <script type="text/javascript">
             var Tawk_API = Tawk_API || {},
                 Tawk_LoadStart = new Date();
             (function() {
@@ -363,7 +375,7 @@
                 s1.setAttribute('crossorigin', '*');
                 s0.parentNode.insertBefore(s1, s0);
             })();
-        </script>
+        </script> --}}
     @endif
 
 
@@ -622,3 +634,4 @@
 </body>
 
 </html>
+

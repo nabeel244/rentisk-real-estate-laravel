@@ -260,7 +260,8 @@ class UserHomeController extends Controller
         $this->validate($request, $rules, $customMessages);
 
 
-        $user=Auth::guard('web')->user();
+        // $user=Auth::guard('web')->user();
+        $user=Auth::user();
 
         $isExist=PropertyReview::where(['user_id'=>$user->id,'property_id'=>$request->property_id])->count();
 

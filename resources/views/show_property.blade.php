@@ -435,9 +435,23 @@
                                         <input type="hidden" name="avarage_rating" id="avarage_rating" value="5">
                                         <input type="hidden" name="property_id" id="property_id" value="{{ $property->id }}">
 
-                                        @auth('web')
+                                        @php
+                                            $webUser = Auth::guard('web')->user();
+                                            $tenantUser = Auth::guard('tenant')->user();
+                                        @endphp
+
+                                        @if (!$webUser && !$tenantUser)
+                                        <p class="worning"><a href="{{ route('login') }}" class="text-danger">{{__('user.Please Login To Write Review.')}}</a></p>  
+                                        
+                                        @else
+                                            @if (($webUser && $webUser->id != $property->user_id) || ($tenantUser && $tenantUser->id != $property->user_id))
+                                                <button type="submit" class="common_btn">{{__('user.Submit')}}</button>
+                                            @endif
+                                        @endif
+                                        {{-- @auth('web')
                                             @php
-                                                $activeUser=Auth::guard('web')->user();
+                                                // $activeUser=Auth::guard('web')->user();
+                                                $activeUser=Auth::user();
                                             @endphp
                                             @if ($activeUser->id !=$property->user_id)
                                             <button type="submit" class="common_btn">{{__('user.Submit')}}</button>
@@ -446,7 +460,7 @@
 
                                         <p class="worning"><a href="{{ route('login') }}" class="text-danger">{{__('user.Please Login To Write Review.')}}</a></p>
 
-                                        @endauth
+                                        @endauth --}}
 
                                     </div>
                                 </div>
@@ -485,24 +499,8 @@
                 <form id="listingAuthContactForm">
                     @csrf
                     <div class="wsus__sidebar_input">
-                        <label>{{__('user.Name')}}</label>
-                        <input type="text" name="name">
-                    </div>
-                    <div class="wsus__sidebar_input">
-                        <label>{{__('user.Email')}}</label>
-                        <input type="email" name="email">
-                    </div>
-                    <div class="wsus__sidebar_input">
-                        <label>{{__('user.Phone')}}</label>
-                        <input type="text" name="phone">
-                    </div>
-                    <div class="wsus__sidebar_input">
-                        <label>{{__('user.Subject')}}</label>
-                        <input type="text" name="subject">
-                    </div>
-                    <div class="wsus__sidebar_input">
-                        <label>{{__('user.Description')}}</label>
-                        <textarea cols="3" rows="3" name="message"></textarea>
+                        <label>{{__('user.Message')}}</label>
+                        <textarea cols="3" rows="3" name="body"></textarea>
                         <input type="hidden" name="user_type" value="{{ $property->user_type }}">
                         @if ($property->user_type==1)
                         <input type="hidden" name="admin_id" value="{{ $property->admin_id }}">
@@ -510,12 +508,19 @@
                         <input type="hidden" name="user_id" value="{{ $property->user_id }}">
                         @endif
 
+                        @php
+                        $webUser = Auth::guard('web')->user();
+                        $tenantUser = Auth::guard('tenant')->user();
+                    @endphp
 
-                        @if($recaptcha_setting->status==1)
-                        <p class="g-recaptcha mt-3" data-sitekey="{{ $recaptcha_setting->site_key }}"></p>
+                    @if (!$webUser && !$tenantUser)
+                        <p class="worning"><a href="{{ route('login') }}" class="text-danger">Please Login To Send Message</a></p>
+                    @else
+                        @if (($webUser && $webUser->id != $property->user_id) || ($tenantUser && $tenantUser->id != $property->user_id))
+                        <button type="submit" id="listingAuthorContctBtn" class="common_btn"><i id="listcontact-spinner" class="loading-icon fa fa-spin fa-spinner d-none mr-5"></i> {{__('user.Send Message')}}</button>
+
                         @endif
-
-                    <button type="submit" id="listingAuthorContctBtn" class="common_btn"><i id="listcontact-spinner" class="loading-icon fa fa-spin fa-spinner d-none mr-5"></i> {{__('user.Send Message')}}</button>
+                    @endif
                     </div>
 
                 </form>
@@ -736,7 +741,8 @@
                 $("#listingAuthorContctBtn").removeClass('site-btn-effect')
 
                 $.ajax({
-                    url: "{{ route('user.contact.message') }}",
+                    // url: "{{ route('user.contact.message') }}",
+                    url: "{{ route('send.message') }}",
                     type:"post",
                     data:$('#listingAuthContactForm').serialize(),
                     success:function(response){

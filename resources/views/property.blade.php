@@ -52,6 +52,7 @@
 <!--=====PROPERTY PAGE START=====-->
 <section class="wsus__property_page mt_45 mb_45">
   <div class="container">
+    <div id="map" style="height: 400px; width: 100%;"></div>
     <div class="row">
       <div class="col-xl-8">
         <div class="row">
@@ -674,7 +675,34 @@
   </div>
 </section>
 <!--=====PROPERTY PAGE END=====-->
-
+<script>
+    function initMap() {
+        var geocoder = new google.maps.Geocoder();
+        var map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 10,
+            center: {lat: 40.712776, lng: -74.005974} // This will update dynamically based on geocoding results
+        });
+    
+        @foreach($properties as $property)
+            geocodeAddress(geocoder, map, '{{ $property['address'] }}', '{{ $property['name'] }}');
+        @endforeach
+    }
+    
+    function geocodeAddress(geocoder, map, address, title) {
+        geocoder.geocode({'address': address}, function(results, status) {
+            if (status === 'OK') {
+                map.setCenter(results[0].geometry.location);
+                var marker = new google.maps.Marker({
+                    map: map,
+                    position: results[0].geometry.location,
+                    title: title
+                });
+            } else {
+                console.error('Geocode was not successful for the following reason: ' + status);
+            }
+        });
+    }
+    </script>
 <script>
     (function($) {
     "use strict";
