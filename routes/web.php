@@ -106,14 +106,14 @@ Route::group([
 
 
 //    Route::group(['middleware' => ['demo', 'XSS', 'translation']], function () {
-    Route::group(['middleware' => ['XSS', 'translation']], function () {
+Route::group(['middleware' => ['XSS', 'translation']], function () {
 
-       Route::group(['middleware' => ['maintainance']], function () {
+    Route::group(['middleware' => ['maintainance']], function () {
         ////// Tenant routes
- //////// add for tenant dashboard
- Route::group(['as' => 'tenant.', 'prefix' => 'tenant'], function () {
-    Route::get('dashboard', [TenantDashboardController::class, 'dashboard'])->name('dashboard');
-    });
+        //////// add for tenant dashboard
+        Route::group(['as' => 'tenant.', 'prefix' => 'tenant'], function () {
+            Route::get('dashboard', [TenantDashboardController::class, 'dashboard'])->name('dashboard');
+        });
 
         Route::get('/', [HomeController::class, 'index'])->name('home');
         Route::get('/about-us', [HomeController::class, 'aboutUs'])->name('about.us');
@@ -142,6 +142,8 @@ Route::group([
         Route::get('/property/{slug}', [HomeController::class, 'propertDetails'])->name('property.details');
         Route::get('search-property', [HomeController::class, 'searchPropertyPage'])->name('search-property');
 
+        Route::post('send-chat-mesg', [HomeController::class, 'sendMSG'])->name('ajaxRequest.post');
+        Route::post('get-latest-chat', [HomeController::class, 'getChat'])->name('get.latest.chat');
         Route::post('user-contact-message', [ContactController::class, 'messageForUser'])->name('user.contact.message');
 
         Route::get('/download-listing-file/{file}', [HomeController::class, 'downloadListingFile'])->name('download-listing-file');
@@ -167,6 +169,10 @@ Route::group([
             Route::get('my-review', [UserHomeController::class, 'myReview'])->name('my-review');
             Route::get('delete-review', [UserHomeController::class, 'deleteReview'])->name('delete-review');
 
+            Route::get('chat-with-tenant', [UserHomeController::class, 'chatWithTenant'])->name('chat-with-tenant');
+            Route::get('open-tenant-chat/{id}', [UserHomeController::class, 'openChat'])->name('open.chat');
+            Route::post('get-latest-tenant-chat', [UserHomeController::class, 'GetLatestTenantChat'])->name('get.latest.chat.of.tenant');
+            Route::post('send-message-to-tenant', [UserHomeController::class, 'SendMegToTenant'])->name('tenantajaxRequest.post');
             Route::get('client-review', [UserHomeController::class, 'clientReview'])->name('client-review');
             Route::post('store-review', [UserHomeController::class, 'storeReview'])->name('store-review');
             Route::get('edit-review/{id}', [UserHomeController::class, 'editReview'])->name('edit-review');

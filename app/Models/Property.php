@@ -14,45 +14,55 @@ class Property extends Model
 
     public function getAverageRatingAttribute()
     {
-        return $this->avgReview()->avg('avarage_rating') ? : '0';
+        return $this->avgReview()->avg('avarage_rating') ?: '0';
     }
 
-    public function avgReview(){
+    public function avgReview()
+    {
         return $this->hasMany(PropertyReview::class)->where('status', 1);
     }
 
 
-    public function propertyType(){
+    public function propertyType()
+    {
         return $this->belongsTo(PropertyType::class);
     }
 
-    public function propertyPurpose(){
+    public function propertyPurpose()
+    {
         return $this->belongsTo(PropertyPurpose::class);
     }
 
-    public function propertyAminities(){
+    public function propertyAminities()
+    {
         return $this->hasMany(PropertyAminity::class);
     }
 
-    public function propertyImages(){
+    public function propertyImages()
+    {
         return $this->hasMany(PropertyImage::class);
     }
 
-    public function propertyNearestLocations(){
+    public function propertyNearestLocations()
+    {
         return $this->hasMany(PropertyNearestLocation::class);
     }
 
-    public function city(){
+    public function city()
+    {
         return $this->belongsTo(City::class);
     }
-    public function admin(){
+    public function admin()
+    {
         return $this->belongsTo(Admin::class);
     }
-    public function user(){
-        return $this->belongsTo(User::class);
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function reviews(){
+    public function reviews()
+    {
         return $this->hasMany(PropertyReview::class);
     }
 

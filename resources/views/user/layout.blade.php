@@ -1,5 +1,5 @@
 @php
-    $setting=App\Models\Setting::first();
+$setting=App\Models\Setting::first();
 @endphp
 
 
@@ -8,9 +8,8 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport"
-    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, target-densityDpi=device-dpi" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, target-densityDpi=device-dpi" />
     @yield('title')
     <link rel="icon" type="image/png" href="{{ url($setting->favicon) }}">
 
@@ -22,6 +21,7 @@
     <link rel="stylesheet" href="{{ asset('user/css/slick.css') }}">
     <link rel="stylesheet" href="{{ asset('user/css/select2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('user/css/add_row_custon.css') }}">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css">
 
     <link rel="stylesheet" href="{{ asset('toastr/toastr.min.css') }}">
     <link rel="stylesheet" href="{{ asset('backend/iconpicker/fontawesome-iconpicker.min.css') }}">
@@ -29,7 +29,7 @@
     <link rel="stylesheet" href="{{ asset('user/css/responsive.css') }}">
 
     @if ($setting->text_direction=="RTL")
-        <link rel="stylesheet" href="{{ asset('user/css/rtl.css') }}">
+    <link rel="stylesheet" href="{{ asset('user/css/rtl.css') }}">
     @endif
 
     <link rel="stylesheet" href="{{ asset('user/css/dev.css') }}">
@@ -43,35 +43,37 @@
         .fade.in {
             opacity: 1 !important;
         }
+
         .ck-content {
             min-height: 6rem !important;
         }
+
     </style>
 </head>
 
 <body>
 
-@php
+    @php
     $user=Auth::guard('web')->user();
     $default_image=App\Models\BannerImage::find(15);
-@endphp
+    @endphp
 
-  <!--============================
+    <!--============================
     DASHBOARD PAGE START
   ==============================-->
-  <section class="wsus__dashboard">
-      <div class="container-fluid">
-          <span class="wsus__menu_icon"><i class="fas fa-bars"></i></span>
-          <div class="wsus__dashboard_side_bar">
-            <span class="wsus__close_icon"><i class="fas fa-times"></i></span>
-            <a class="wsus__dashboard_logo" href="{{ route('home') }}">
-                <img src="{{ asset($setting->logo) }}" alt="logo" class="img-fluid">
-              </a>
-              <div class="wsus__agent_img">
-                  <img src="{{ $user->image ? url($user->image) : url($default_image->image) }}" alt="agent" class="img-fluid">
-                  <h5>{{ $user->name }}</h5>
-              </div>
-              <ul class="wsus__deshboard_menu">
+    <section class="wsus__dashboard">
+        <div class="container-fluid">
+            <span class="wsus__menu_icon"><i class="fas fa-bars"></i></span>
+            <div class="wsus__dashboard_side_bar">
+                <span class="wsus__close_icon"><i class="fas fa-times"></i></span>
+                <a class="wsus__dashboard_logo" href="{{ route('home') }}">
+                    <img src="{{ asset($setting->logo) }}" alt="logo" class="img-fluid">
+                </a>
+                <div class="wsus__agent_img">
+                    <img src="{{ $user->image ? url($user->image) : url($default_image->image) }}" alt="agent" class="img-fluid">
+                    <h5>{{ $user->name }}</h5>
+                </div>
+                <ul class="wsus__deshboard_menu">
                     <li><a class="{{ Route::is('user.dashboard') ? 'dash_active' : '' }}" href="{{ route('user.dashboard') }}"><i class="fal fa-fw fa-tachometer-alt"></i> {{__('user.Dashboard')}}</a></li>
 
                     <li><a href="{{ route('home') }}"><i class="fal fa-globe"></i> {{__('user.Go to Homepage')}}</a></li>
@@ -80,7 +82,7 @@
 
                     <li><a class="{{ Route::is('user.my-profile') ? 'dash_active' : '' }}" href="{{ route('user.my-profile') }}"><i class="fas fa-user-tie"></i> {{__('user.My Profile')}}</a></li>
 
-                    <li><a  class="{{ Route::is('user.my-order') || Route::is('user.order.details') ? 'dash_active' : '' }}" href="{{ route('user.my-order') }}"><i class="far fa-list"></i> {{__('user.Order Log')}}</a></li>
+                    <li><a class="{{ Route::is('user.my-order') || Route::is('user.order.details') ? 'dash_active' : '' }}" href="{{ route('user.my-order') }}"><i class="far fa-list"></i> {{__('user.Order Log')}}</a></li>
 
                     <li><a class="{{ Route::is('user.my-wishlist') ? 'dash_active' : '' }}" href="{{ route('user.my-wishlist') }}"><i class="fas fa-heart"></i> {{__('user.Wishlist')}}</a></li>
 
@@ -91,13 +93,14 @@
                     <li><a class="{{ Route::is('user.my-review') || Route::is('user.edit-review') ? 'dash_active' : '' }}" href="{{ route('user.my-review') }}"><i class="fas fa-star"></i> {{__('user.My Reviews')}}</a></li>
 
                     <li><a class="{{ Route::is('user.client-review') ? 'dash_active' : '' }}" href="{{ route('user.client-review') }}"><i class="fas fa-star"></i> {{__('user.Client Reviews')}}</a></li>
+                    <li><a class="{{ Route::is('user.chat-with-tenant') ? 'dash_active' : '' }}" href="{{ route('user.chat-with-tenant') }}"> <i class="fab fa-rocketchat"></i> {{__('Tenant Chat')}}</a></li>
 
                     <li><a href="{{ route('logout') }}"><i class="fas fa-sign-out-alt"></i> {{__('user.Logout')}}</a></li>
-              </ul>
-          </div>
+                </ul>
+            </div>
 
 
-          @yield('user-dashboard')
+            @yield('user-dashboard')
 
 
 
@@ -110,7 +113,7 @@
 
     <!---=====SCROLL BUTTON START=====-->
     <div class="wsus__scroll_btn">
-      <i class="fas fa-chevron-up"></i>
+        <i class="fas fa-chevron-up"></i>
     </div>
     <!---=====SCROLL BUTTON END=====-->
     @php
@@ -144,61 +147,64 @@
 
     <script>
         @if(Session::has('messege'))
-          var type="{{Session::get('alert-type','info')}}"
-          switch(type){
-              case 'info':
-                   toastr.info("{{ Session::get('messege') }}");
-                   break;
-              case 'success':
-                  toastr.success("{{ Session::get('messege') }}");
-                  break;
-              case 'warning':
-                 toastr.warning("{{ Session::get('messege') }}");
-                  break;
-              case 'error':
-                  toastr.error("{{ Session::get('messege') }}");
-                  break;
-          }
+        var type = "{{Session::get('alert-type','info')}}"
+        switch (type) {
+            case 'info':
+                toastr.info("{{ Session::get('messege') }}");
+                break;
+            case 'success':
+                toastr.success("{{ Session::get('messege') }}");
+                break;
+            case 'warning':
+                toastr.warning("{{ Session::get('messege') }}");
+                break;
+            case 'error':
+                toastr.error("{{ Session::get('messege') }}");
+                break;
+        }
         @endif
+
     </script>
 
     @if ($errors->any())
-        @foreach ($errors->all() as $error)
-            <script>
-                toastr.error('{{ $error }}');
-            </script>
-        @endforeach
+    @foreach ($errors->all() as $error)
+    <script>
+        toastr.error('{{ $error }}');
+
+    </script>
+    @endforeach
     @endif
 
 
 
     <script>
         (function($) {
-        "use strict";
-        $(document).ready(function () {
+            "use strict";
+            $(document).ready(function() {
 
-            CKEDITOR.replace( 'summernote' );
-            CKEDITOR.replace( 'summernote2' );
-            CKEDITOR.replace( 'summernote3' );
+                CKEDITOR.replace('summernote');
+                CKEDITOR.replace('summernote2');
+                CKEDITOR.replace('summernote3');
 
-            $('.custom-icon-picker').iconpicker({
-                templates: {
-                    popover: '<div class="iconpicker-popover popover"><div class="arrow"></div>' +
-                        '<div class="popover-title"></div><div class="popover-content"></div></div>',
-                    footer: '<div class="popover-footer"></div>',
-                    buttons: '<button class="iconpicker-btn iconpicker-btn-cancel btn btn-default btn-sm">Cancel</button>' +
-                        ' <button class="iconpicker-btn iconpicker-btn-accept btn btn-primary btn-sm">Accept</button>',
-                    search: '<input type="search" class="form-control iconpicker-search" placeholder="Type to filter" />',
-                    iconpicker: '<div class="iconpicker"><div class="iconpicker-items"></div></div>',
-                    iconpickerItem: '<a role="button" href="javascript:;" class="iconpicker-item"><i></i></a>'
-                }
-            })
-        });
+                $('.custom-icon-picker').iconpicker({
+                    templates: {
+                        popover: '<div class="iconpicker-popover popover"><div class="arrow"></div>' +
+                            '<div class="popover-title"></div><div class="popover-content"></div></div>'
+                        , footer: '<div class="popover-footer"></div>'
+                        , buttons: '<button class="iconpicker-btn iconpicker-btn-cancel btn btn-default btn-sm">Cancel</button>' +
+                            ' <button class="iconpicker-btn iconpicker-btn-accept btn btn-primary btn-sm">Accept</button>'
+                        , search: '<input type="search" class="form-control iconpicker-search" placeholder="Type to filter" />'
+                        , iconpicker: '<div class="iconpicker"><div class="iconpicker-items"></div></div>'
+                        , iconpickerItem: '<a role="button" href="javascript:;" class="iconpicker-item"><i></i></a>'
+                    }
+                })
+            });
 
         })(jQuery);
+
     </script>
 
 
-    </body>
+</body>
 
-    </html>
+</html>

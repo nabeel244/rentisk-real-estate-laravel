@@ -18,6 +18,7 @@ class TenantDashboardController extends Controller
     }
     public function dashboard()
     {
+        
         // dd(Auth::guard('tenant')->user());
         return view('tenant.dashboard');
     }
