@@ -291,7 +291,7 @@
                                         <div class="d-flex bd-highlight">
 
                                             <div class="user_info">
-                                                <span> <a href="{{route('user.open.chat', $tenant->id)}}" style="color: white"> {{$tenant->name}}</a></span>
+                                                <span> <a href="{{route('user.open.chat', $tenant->id)}}" style="color: white">{{$tenant->name}}</a></span>
                                             </div>
                                             <div class="img_cont">
 
@@ -352,79 +352,4 @@
         </div>
     </div>
 </div>
-
-<script>
-    $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-    });
-    // var propertyslug = $("#getslug").val();
-    $("#sendwritetext").on('keydown', function(e) {
-        if (e.keyCode == 13) {
-            console.log()
-            var getpropertyslug = $("#getslug").val();
-            var usermesg = $(this).val();
-            $.ajax({
-                type: 'POST'
-                , url: "{{ route('user.tenantajaxRequest.post') }}"
-                , data: {
-                    "_token": "{{ csrf_token() }}"
-                    , msg: usermesg
-                    , slug: getpropertyslug
-                }
-                , success: function(data) {
-                    $("#sendwritetext").val('');
-
-                    getlatestchat(getpropertyslug);
-                }
-            });
-        }
-
-    });
-
-    // function getlatestchat(propertyslug) {
-    //     $.ajax({
-    //         type: 'POST'
-    //         , url: "{{ route('get.latest.chat') }}"
-    //         , data: {
-    //             "_token": "{{ csrf_token() }}"
-    //             , slug: propertyslug
-    //         }
-    //         , success: function(data) {
-    //             if (data) {
-    //                 $.each(data, function(index, chatItem) {
-
-    //                     var landlordchatBox;
-    //                     if (chatItem.position == 'tenant') {
-    //                         landlordchatBox = $('<div class="media media-chat media-chat-reverse" style="display: flex">' +
-    //                             '<div class="media-body">' +
-    //                             '<p>' + chatItem.message + '</p>' +
-    //                             '</div>' +
-    //                             '</div>');
-
-    //                     } else {
-
-    //                         landlordchatBox = $('<div class="media media-chat">' +
-    //                             '<div class="media-body">' +
-    //                             '<p>' + chatItem.message + '</p>' +
-    //                             '</div>' +
-    //                             '</div>');
-
-    //                     }
-    //                     $("#landlordmsg").append(landlordchatBox);
-
-    //                 })
-
-    //             } else {
-
-    //             }
-
-
-    //         }
-    //     });
-
-    // }
-
-</script>
 @endsection

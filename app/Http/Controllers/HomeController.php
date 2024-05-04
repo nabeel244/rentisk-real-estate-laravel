@@ -932,9 +932,9 @@ class HomeController extends Controller
 
             UserChat::create([
                 'message' => $request->msg,
-                'from_user' => $getTenantId,
-                'to_user' => $property->user->id,
-                'position' => 'tenant',
+                'tenant_id' => $getTenantId,
+                'landlord_id' => $property->user->id,
+                'send_to' => 'landlord',
             ]);
             return json_encode(['status' => 'ok']);
         } catch (Exception $e) {
@@ -948,10 +948,12 @@ class HomeController extends Controller
         $property = Property::with('user')->where('slug', $request->slug)->first();
         $landlordid  = $property->user->id;
         // $getchat =  UserChat::where('from_user', $getTenantId)->where('to_user', $property->user->id)->get()->toArray();
-        $getchat =  UserChat::where(function ($query) use ($getTenantId, $landlordid) {
-            $query->where('from_user', $getTenantId)->where('to_user', $landlordid)
-                ->orWhere('from_user', $landlordid)->where('to_user', $getTenantId);
-        })->get()->toArray();
+        // $getchat =  UserChat::where(function ($query) use ($getTenantId, $landlordid) {
+        //     $query->where('from_user', $getTenantId)->where('to_user', $landlordid)
+        //         ->orWhere('from_user', $landlordid)->where('to_user', $getTenantId);
+        // })->get()->toArray();
+        $getchat =  UserChat::where('landlord_id', $landlordid)->where('tenant_id', $getTenantId)->get()->toArray();
+
 
 
         return response()->json($getchat);

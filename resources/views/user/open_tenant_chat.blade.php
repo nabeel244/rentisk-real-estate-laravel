@@ -291,11 +291,11 @@
                                         <div class="d-flex bd-highlight">
 
                                             <div class="user_info">
-                                                <span> <a href="{{route('user.open.chat', $tenant->id)}}" style="color: white"> {{$tenant->name}}</a></span>
+                                                <span> <a href="{{route('user.open.chat', $tenant->id)}}" style="color: white">{{$tenant->name}} </a> <span style="font-size: 8px">
+                                                        ( {{\App\Models\UserChat::where('tenant_id',$tenant->id)->where('landlord_id', auth()->user()->id)->count('message')}} )
+                                                    </span></span>
                                             </div>
-                                            <div class="img_cont">
 
-                                            </div>
                                         </div>
                                     </li>
                                     @endforeach
@@ -304,7 +304,7 @@
                             <div class="card-footer"></div>
                         </div>
                     </div>
-                    <input type="hidden" id="getuserid" value="{{$tenant->id}}">
+                    <input type="hidden" id="getuserid" value="{{$user->id}}">
                     <div class="col-lg-7">
                         <div class="card">
 
@@ -410,13 +410,13 @@
                         $.each(data, function(index, chatItem) {
 
                             var landlordchatBox;
-                            if (chatItem.position == 'landlord') {
-
-                                landlordchatBox = $('<div class="d-flex justify-content-end mb-4">' +
-                                    '<div class="msg_cotainer_send">' +
+                            if (chatItem.send_to == 'landlord') {
+                                landlordchatBox = $('<div class="d-flex justify-content-start mb-4">' +
+                                    '<div class="msg_cotainer">' +
                                     chatItem.message +
                                     '</div>' +
                                     '</div>');
+
 
                                 // landlordchatBox = $('<div class="media media-chat media-chat-reverse" style="display: flex">' +
                                 //     '<div class="media-body">' +
@@ -425,12 +425,12 @@
                                 //     '</div>');
 
                             } else {
-
-                                landlordchatBox = $('<div class="d-flex justify-content-start mb-4">' +
-                                    '<div class="msg_cotainer">' +
+                                landlordchatBox = $('<div class="d-flex justify-content-end mb-4">' +
+                                    '<div class="msg_cotainer_send">' +
                                     chatItem.message +
                                     '</div>' +
                                     '</div>');
+
                                 // landlordchatBox = $('<div class="media media-chat">' +
                                 //     '<div class="media-body">' +
                                 //     '<p>' + chatItem.message + '</p>' +
@@ -453,8 +453,10 @@
         }
         const interval = setInterval(function() {
             var tenantid = $("#getuserid").val();
+            $("#landlordmsg").load(location.href + " #landlordmsg>*", "");
+            // $('#landlordmsg div').empty('');
             getlatestchat(tenantid)
-        }, 10000);
+        }, 30000);
     });
 
 </script>

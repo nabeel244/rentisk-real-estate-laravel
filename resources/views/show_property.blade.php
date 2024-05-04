@@ -1093,84 +1093,89 @@
         "use strict";
 
 
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-        // var propertyslug = $("#getslug").val();
-        $("#sendwritetext").on('keydown', function(e) {
-            if (e.keyCode == 13) {
-                console.log()
-                var getpropertyslug = $("#getslug").val();
-                var usermesg = $(this).val();
-                $.ajax({
-                    type: 'POST'
-                    , url: "{{ route('ajaxRequest.post') }}"
-                    , data: {
-                        "_token": "{{ csrf_token() }}"
-                        , msg: usermesg
-                        , slug: getpropertyslug
-                    }
-                    , success: function(data) {
-                        $("#sendwritetext").val('');
 
-                        getlatestchat(getpropertyslug);
-                    }
-                });
-            }
-
-        });
-
-        function getlatestchat(propertyslug) {
-            $.ajax({
-                type: 'POST'
-                , url: "{{ route('get.latest.chat') }}"
-                , data: {
-                    "_token": "{{ csrf_token() }}"
-                    , slug: propertyslug
-                }
-                , success: function(data) {
-                    if (data) {
-                        $.each(data, function(index, chatItem) {
-
-                            var landlordchatBox;
-                            if (chatItem.position == 'tenant') {
-                                landlordchatBox = $('<div class="media media-chat media-chat-reverse" style="display: flex">' +
-                                    '<div class="media-body">' +
-                                    '<p>' + chatItem.message + '</p>' +
-                                    '</div>' +
-                                    '</div>');
-
-                            } else {
-
-                                landlordchatBox = $('<div class="media media-chat">' +
-                                    '<div class="media-body">' +
-                                    '<p>' + chatItem.message + '</p>' +
-                                    '</div>' +
-                                    '</div>');
-
-                            }
-                            $("#landlordmsg").append(landlordchatBox);
-
-                        })
-
-                    } else {
-
-                    }
-
-
-                }
-            });
-
-        }
         $(document).ready(function() {
-
             const interval = setInterval(function() {
                 var getpropertyslug = $("#getslug").val();
+                $("#landlordmsg").load(location.href + " #landlordmsg>*", "");
 
+                // $('#landlordmsg div').empty('');
                 getlatestchat(getpropertyslug)
             }, 10000);
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            // var propertyslug = $("#getslug").val();
+            $("#sendwritetext").on('keydown', function(e) {
+                if (e.keyCode == 13) {
+                    console.log()
+                    var getpropertyslug = $("#getslug").val();
+                    var usermesg = $(this).val();
+                    $.ajax({
+                        type: 'POST'
+                        , url: "{{ route('ajaxRequest.post') }}"
+                        , data: {
+                            "_token": "{{ csrf_token() }}"
+                            , msg: usermesg
+                            , slug: getpropertyslug
+                        }
+                        , success: function(data) {
+                            $("#sendwritetext").val('');
+
+                            getlatestchat(getpropertyslug);
+                        }
+                    });
+                }
+
+            });
+
+            function getlatestchat(propertyslug) {
+                $.ajax({
+                    type: 'POST'
+                    , url: "{{ route('get.latest.chat') }}"
+                    , data: {
+                        "_token": "{{ csrf_token() }}"
+                        , slug: propertyslug
+                    }
+                    , success: function(data) {
+                        if (data) {
+                            $.each(data, function(index, chatItem) {
+
+                                var landlordchatBox;
+                                if (chatItem.send_to == 'tenant') {
+
+
+                                    landlordchatBox = $('<div class="media media-chat">' +
+                                        '<div class="media-body">' +
+                                        '<p>' + chatItem.message + '</p>' +
+                                        '</div>' +
+                                        '</div>');
+
+                                } else {
+
+                                    landlordchatBox = $('<div class="media media-chat media-chat-reverse" style="display: flex">' +
+                                        '<div class="media-body">' +
+                                        '<p>' + chatItem.message + '</p>' +
+                                        '</div>' +
+                                        '</div>');
+
+                                }
+                                $("#landlordmsg").append(landlordchatBox);
+
+                            })
+
+                        } else {
+
+                        }
+
+
+                    }
+                });
+
+            }
+
             $("#listingAuthorContctBtn").on('click', function(e) {
                 e.preventDefault();
 

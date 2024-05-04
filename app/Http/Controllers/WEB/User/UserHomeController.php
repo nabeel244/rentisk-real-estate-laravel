@@ -45,6 +45,7 @@ class UserHomeController extends Controller
 
     public function openChat($id)
     {
+
         $tenants = User::where('role', 'tenant')->where('status', '1')->get();
         $user = User::find($id);
         return view('user.open_tenant_chat', compact('tenants', 'user'));
@@ -54,10 +55,16 @@ class UserHomeController extends Controller
     {
         $getlandlordId = Auth::guard('web')->user()->id;
         $tenantId  = $request->tenantid;
-        $getchat =  UserChat::where(function ($query) use ($getlandlordId, $tenantId) {
-            $query->where('from_user', $getlandlordId)->where('to_user', $tenantId)
-                ->orWhere('from_user', $tenantId)->where('to_user', $getlandlordId);
-        })->get()->toArray();
+        $getchat =  UserChat::where('landlord_id', $getlandlordId)->where('tenant_id', $tenantId)->get()->toArray();
+        // $getchat2 =  UserChat::where('from_user', $tenantId)->where('to_user', $getlandlordId)->get();
+
+        // $getchat = $getchat1->merge($getchat2);
+        // $getchat =  UserChat::where(function ($query) use ($getlandlordId, $tenantId) {
+        //     $query->where('from_user', $getlandlordId)->where('to_user', $tenantId)
+        //         ->orWhere('from_user', $tenantId)->where('to_user', $getlandlordId);
+        // })->get()->toArray();
+
+
 
 
         return response()->json($getchat);
@@ -70,9 +77,9 @@ class UserHomeController extends Controller
 
             UserChat::create([
                 'message' => $request->msg,
-                'from_user' => $user->id,
-                'to_user' => $request->tenantid,
-                'position' => 'landlord',
+                'landlord_id' => $user->id,
+                'tenant_id' => $request->tenantid,
+                'send_to' => 'tenant',
             ]);
             return json_encode(['status' => 'ok']);
         } catch (Exception $e) {
