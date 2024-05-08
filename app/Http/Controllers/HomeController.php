@@ -902,7 +902,7 @@ class HomeController extends Controller
                 return redirect()->back()->with($notification);
             }
 
-            $property->views = $property->views + 1;
+            $property->views = $property->views + 1; 
             $property->save();
             $similarProperties = Property::with('translation')->where(['status' => 1, 'property_type_id' => $property->property_type_id])->where('id', '!=', $property->id)->get()->take(3);
 
@@ -919,6 +919,51 @@ class HomeController extends Controller
             $notification = array('messege' => $notification, 'alert-type' => 'error');
             return redirect()->back()->with($notification);
         }
+    }
+
+    public function initiatePayment(Request $request)
+    {
+        $property = Property::find($request->property_id);
+        if (!$property) {
+            return redirect()->back()->with([
+                'messege' => 'Property not found',
+                'alert-type' => 'error'
+            ]);
+        }
+
+        // Calculate the amounts
+        $totalAmount = $property->price * 100; // Assuming price is in dollars
+        $platformFee = $totalAmount * 0.1; // 10% fee
+        $landlordAmount = $totalAmount - $platformFee;
+
+        // Initialize ComGate Payment
+        $response = Http::asForm()->post('https://payments.comgate.cz/v1.0/create', [
+            'merchant' => 'YOUR_MERCHANT_ID',
+            'price' => $totalAmount,
+            'curr' => 'CZK',
+            'label' => 'Payment for Property #' . $property->id,
+            'refId' => $property->id,
+            'method' => 'CARD_CZ_CSOB',
+            'email' => $request->email,
+            'prepareOnly' => true,
+            'test' => true,
+            'secret' => 'YOUR_SECRET_KEY',
+            'url' => route('payment.callback')
+        ]);
+
+        if ($response->successful()) {
+            $paymentData = $response->json();
+            return redirect($paymentData['redirectUrl']);
+        } else {
+            return redirect()->back()->with([
+                'messege' => 'Payment initialization failed',
+                'alert-type' => 'error'
+            ]);
+        }
+    }
+    public function paymentCallback(Request $request)
+    {
+        // Handle your callback logic here
     }
 
     public function sendMSG(Request $request)

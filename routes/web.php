@@ -145,6 +145,9 @@ Route::get('/messages', [MessageToWayController::class, 'index'])->name('message
         Route::get('/property/{slug}', [HomeController::class, 'propertDetails'])->name('property.details');
         Route::get('search-property', [HomeController::class, 'searchPropertyPage'])->name('search-property');
 
+        Route::post('property/initiate-payment', [HomeController::class, 'initiatePayment'])->name('property.initiatePayment');
+        Route::post('payment/callback', [HomeController::class, 'paymentCallback'])->name('payment.callback');
+
         Route::post('send-chat-mesg', [HomeController::class, 'sendMSG'])->name('ajaxRequest.post');
         Route::post('get-latest-chat', [HomeController::class, 'getChat'])->name('get.latest.chat');
         Route::post('user-contact-message', [ContactController::class, 'messageForUser'])->name('user.contact.message');
