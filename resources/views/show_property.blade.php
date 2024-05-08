@@ -446,6 +446,13 @@
                                         <li><a href="#addReviewSection"><i class="fal fa-comment-alt-dots"></i> {{__('user.Add Review')}}</a></li>
                                         <li><a href="{{ route('user.add.to.wishlist',$property->id) }}"><i class="fas fa-heart"></i> {{__('user.Add to Wishlist')}}</a></li>
                                     </ul>
+
+                                    <form action="{{ route('property.initiatePayment') }}" method="POST">
+    @csrf
+    <input type="hidden" name="property_id" value="{{ $property->id }}">
+    <input type="hidden" name="email" value="{{ Auth::check() ? Auth::user()->email : '' }}">
+    <button type="submit" class="common_btn mt_20">Pay Now via ComGate</button>
+</form>
                             </div>
                         </div>
                         <div class="col-12">
