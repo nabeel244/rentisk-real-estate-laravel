@@ -728,18 +728,18 @@
                                                 <input type="hidden" name="avarage_rating" id="avarage_rating" value="5">
                                                 <input type="hidden" name="property_id" id="property_id" value="{{ $property->id }}">
 
-                                                @auth('web')
-                                                @php
+                                        @auth('web')
+                                            @php
                                                 $activeUser=Auth::guard('web')->user();
-                                                @endphp
-                                                @if ($activeUser->id !=$property->user_id)
-                                                <button type="submit" class="common_btn">{{__('user.Submit')}}</button>
-                                                @endif
-                                                @else
+                                            @endphp
+                                            @if ($activeUser->id !=$property->user_id)
+                                            <button type="submit" class="common_btn">{{__('user.Submit')}}</button>
+                                            @endif
+                                        @else
 
                                                 <p class="worning"><a href="{{ route('login') }}" class="text-danger">{{__('user.Please Login To Write Review.')}}</a></p>
 
-                                                @endauth
+                                        @endauth
 
                                             </div>
                                         </div>
@@ -766,74 +766,51 @@
                                 @endif
 
 
-                                <a class="name" href="{{ route('agent.show',['user_type' => '1','user_name'=>$property->admin->slug]) }}">{{ $property->admin->name }}</a>
-                                <a class="mail" href="mailto:{{ $property->admin->email }}"><i class="fal fa-envelope-open"></i> {{ $property->admin->email }}</a>
-                            </div>
-                            @else
-                            <div class="wsus__sidebar_message_top">
-                                <img src="{{ $property->user->image ? url($property->user->image) : url($default_image) }}" alt="images" class="img-fluid img-thumbnail">
-                                <a class="name" href="{{ route('agent.show',['user_type' => '2','user_name'=>$property->user->slug]) }}">{{ $property->user->name }}</a>
-                                <a class="mail" href="mailto:{{ $property->user->email }}"><i class="fal fa-envelope-open"></i> {{ $property->user->email }}</a>
-                            </div>
-                            @endif
-
-                            {{-- <form id="listingAuthContactForm">
-                                @csrf
-                                <div class="wsus__sidebar_input">
-                                    <label>{{__('user.Name')}}</label>
-                            <input type="text" name="name">
-                        </div>
-                        <div class="wsus__sidebar_input">
-                            <label>{{__('user.Email')}}</label>
-                            <input type="email" name="email">
-                        </div>
-                        <div class="wsus__sidebar_input">
-                            <label>{{__('user.Phone')}}</label>
-                            <input type="text" name="phone">
-                        </div>
-                        <div class="wsus__sidebar_input">
-                            <label>{{__('user.Subject')}}</label>
-                            <input type="text" name="subject">
-                        </div>
-                        <div class="wsus__sidebar_input">
-                            <label>{{__('user.Description')}}</label>
-                            <textarea cols="3" rows="3" name="message"></textarea>
-                            <input type="hidden" name="user_type" value="{{ $property->user_type }}">
-                            @if ($property->user_type==1)
-                            <input type="hidden" name="admin_id" value="{{ $property->admin_id }}">
-                            @else
-                            <input type="hidden" name="user_id" value="{{ $property->user_id }}">
-                            @endif
-
-
-                            @if($recaptcha_setting->status==1)
-                            <p class="g-recaptcha mt-3" data-sitekey="{{ $recaptcha_setting->site_key }}"></p>
-                            @endif
-
-                            <button type="submit" id="listingAuthorContctBtn" class="common_btn"><i id="listcontact-spinner" class="loading-icon fa fa-spin fa-spinner d-none mr-5"></i> {{__('user.Send Message')}}</button>
-                        </div>
-
-                        </form> --}}
+                             <a class="name" href="{{ route('agent.show',['user_type' => '1','user_name'=>$property->admin->slug]) }}">{{ $property->admin->name }}</a>
+                             <a class="mail" href="mailto:{{ $property->admin->email }}"><i class="fal fa-envelope-open"></i> {{ $property->admin->email }}</a>
                     </div>
-                    <div class="d-flex justify-content-center">
-                        <div class="card mt-5">
+                @else
+                    <div class="wsus__sidebar_message_top">
+                        <img src="{{ $property->user->image ? url($property->user->image) : url($default_image) }}" alt="images" class="img-fluid img-thumbnail">
+                        <a class="name" href="{{ route('agent.show',['user_type' => '2','user_name'=>$property->user->slug]) }}">{{ $property->user->name }}</a>
+                        <a class="mail" href="mailto:{{ $property->user->email }}"><i class="fal fa-envelope-open"></i> {{ $property->user->email }}</a>
+                    </div>
+                @endif
+                <form id="listingAuthContactForm">
+                    @csrf
+                    <div class="wsus__sidebar_input">
+                        <label>{{__('user.Name')}}</label>
+                        <input type="text" name="name">
+                    </div>
+                    <div class="wsus__sidebar_input">
+                        <label>{{__('user.Email')}}</label>
+                        <input type="email" name="email">
+                    </div>
+                    <div class="wsus__sidebar_input">
+                        <label>{{__('user.Phone')}}</label>
+                        <input type="text" name="phone">
+                    </div>
+                    <div class="wsus__sidebar_input">
+                        <label>{{__('user.Subject')}}</label>
+                        <input type="text" name="subject">
+                    </div>
+                    <div class="wsus__sidebar_input">
+                        <label>{{__('user.Description')}}</label>
+                        <textarea cols="3" rows="3" name="message"></textarea>
+                        <input type="hidden" name="user_type" value="{{ $property->user_type }}">
+                        @if ($property->user_type==1)
+                        <input type="hidden" name="admin_id" value="{{ $property->admin_id }}">
+                        @else
+                        <input type="hidden" name="user_id" value="{{ $property->user_id }}">
+                        @endif
 
-                            <form method="post">
-                                @csrf
-                                {{-- <div class="d-flex flex-row p-1" style="margin-right:30px">
-                                    <div class="chat ml-2 p-3">Land lord incoming user mes</div>
-                                </div>
 
-                                <div class="d-flex flex-row p-1" style="margin-left:30px; float:right">
-                                    <div class="bg-white chat mr-3 p-3">jkdkjk djsda kafro</div>
-                                </div>
-                                <div id="tenantmsg"></div>
-                                <div id="landlordmsg"></div>
-                                <div class="form-group px-1">
-                                    <textarea class="form-control" id="sendwritetext" rows="2" placeholder="Type your message"></textarea>
-                                </div> --}}
+                        @if($recaptcha_setting->status==1)
+                        <p class="g-recaptcha mt-3" data-sitekey="{{ $recaptcha_setting->site_key }}"></p>
+                        @endif
 
-
+                    <button type="submit" id="listingAuthorContctBtn" class="common_btn"><i id="listcontact-spinner" class="loading-icon fa fa-spin fa-spinner d-none mr-5"></i> {{__('user.Send Message')}}</button>
+                    </div>
 
                             </form>
                         </div>
@@ -1185,11 +1162,11 @@
                 $("#listingAuthorContctBtn").removeClass('site-btn-effect')
 
                 $.ajax({
-                    url: "{{ route('user.contact.message') }}"
-                    , type: "post"
-                    , data: $('#listingAuthContactForm').serialize()
-                    , success: function(response) {
-                        if (response.success) {
+                    url: "{{ route('user.contact.message') }}",
+                    type:"post",
+                    data:$('#listingAuthContactForm').serialize(),
+                    success:function(response){
+                        if(response.success){
                             $("#listingAuthContactForm").trigger("reset");
                             toastr.success(response.success)
                             $("#listcontact-spinner").addClass('d-none')

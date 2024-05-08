@@ -64,6 +64,7 @@ class User extends Authenticatable implements JWTSubject
     public function country(){
         return $this->belongsTo(Country::class);
     }
+ 
 
 
     public function getJWTIdentifier()
@@ -74,6 +75,16 @@ class User extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims()
     {
         return [];
+    }
+
+
+    ///////////// for message service ////////////
+    public function messagesSent() {
+        return $this->hasMany(MessageToWay::class, 'from_user_id');
+    }
+    
+    public function messagesReceived() {
+        return $this->hasMany(MessageToWay::class, 'to_user_id');
     }
 
 

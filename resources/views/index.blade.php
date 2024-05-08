@@ -508,7 +508,7 @@
   @endif
 
 
-  @if ($agents->agent_visibility)
+  {{-- @if ($agents->agent_visibility)
   <section class="wsus__agents mt_90 xs_mt_65">
     <div class="container">
       <div class="row">
@@ -552,7 +552,7 @@
       </div>
     </div>
   </section>
-  @endif
+  @endif --}}
 
 
 
@@ -623,7 +623,7 @@
   @endif
 
 
-  @if ($testimonials->testimonial_visibility)
+  {{-- @if ($testimonials->testimonial_visibility)
   <section class="wsus__testimonial mt_75 xs_mt_50 pt_90 xs_pt_65 pb_85 xs_pb_100" style="background: url({{ asset('user/images/bg_shape.jpg') }});">
     <div class="container">
       <div class="row justify-content-between align-content-center">
@@ -662,5 +662,5 @@
       </div>
     </div>
   </section>
-  @endif
+  @endif --}}
 @endsection

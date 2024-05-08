@@ -78,6 +78,7 @@ use App\Http\Controllers\WEB\User\PropertyController;
 use App\Http\Controllers\WEB\Auth\LoginController;
 use App\Http\Controllers\WEB\Auth\RegisterController;
 use App\Http\Controllers\WEB\Auth\ForgotPasswordController;
+use App\Http\Controllers\MessageToWayController;
 
 use App\Http\Controllers\User\UserProfileController;
 use App\Http\Controllers\User\CheckoutController;
@@ -89,7 +90,6 @@ use App\Http\Controllers\WEB\Seller\Auth\SellerForgotPasswordController;
 
 ///// tenant
 use App\Http\Controllers\WEB\Tenant\TenantDashboardController;
-
 
 
 
@@ -106,9 +106,12 @@ Route::group([
 
 
 //    Route::group(['middleware' => ['demo', 'XSS', 'translation']], function () {
-Route::group(['middleware' => ['XSS', 'translation']], function () {
+    Route::group(['middleware' => ['XSS', 'translation']], function () {
+        
+        Route::group(['middleware' => ['maintainance']], function () {
+           Route::post('send-message', [MessageToWayController::class, 'sendMessage'])->name('send.message');
+Route::get('/messages', [MessageToWayController::class, 'index'])->name('messages.index');
 
-    Route::group(['middleware' => ['maintainance']], function () {
         ////// Tenant routes
         //////// add for tenant dashboard
         Route::group(['as' => 'tenant.', 'prefix' => 'tenant'], function () {

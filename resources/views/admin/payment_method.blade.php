@@ -32,14 +32,14 @@
                                             <a class="nav-link" id="stripe-tab" data-toggle="tab" href="#stripeTab" role="tab" aria-controls="stripeTab" aria-selected="true">{{__('admin.Stripe')}}</a>
                                         </li>
 
-                                        <li class="nav-item border rounded mb-1">
+                                        {{-- <li class="nav-item border rounded mb-1">
                                             <a class="nav-link" id="razorpay-tab" data-toggle="tab" href="#razorpayTab" role="tab" aria-controls="razorpayTab" aria-selected="true">{{__('admin.Razorpay')}}</a>
                                         </li>
 
                                         <li class="nav-item border rounded mb-1">
                                             <a class="nav-link" id="flutterwave-tab" data-toggle="tab" href="#flutterwaveTab" role="tab" aria-controls="flutterwaveTab" aria-selected="true">{{__('admin.Flutterwave')}}</a>
-                                        </li>
-
+                                        </li> --}}
+{{-- 
 
 
                                         <li class="nav-item border rounded mb-1">
@@ -60,7 +60,7 @@
 
                                         <li class="nav-item border rounded mb-1">
                                             <a class="nav-link" id="bank-account-tab" data-toggle="tab" href="#bankAccountTab" role="tab" aria-controls="bankAccountTab" aria-selected="true">{{__('admin.Bank Account')}}</a>
-                                        </li>
+                                        </li> --}}
 
                                     </ul>
                                 </div>

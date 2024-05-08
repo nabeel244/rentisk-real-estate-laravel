@@ -75,7 +75,7 @@ class RegisterController extends Controller
         $subject=$template->subject;
         $message=str_replace('{{user_name}}',$user->name,$message);
 
-        // Mail::to($user->email)->send(new UserRegistration($message,$subject, $user));
+        Mail::to($user->email)->send(new UserRegistration($message,$subject, $user));
 
         $notification = trans('user_validation.Register Successfully. Please Verify your email');
         return response()->json(['success'=>$notification]);
