@@ -150,6 +150,11 @@ Route::get('/messages', [MessageToWayController::class, 'index'])->name('message
 
         Route::post('send-chat-mesg', [HomeController::class, 'sendMSG'])->name('ajaxRequest.post');
         Route::post('get-latest-chat', [HomeController::class, 'getChat'])->name('get.latest.chat');
+
+        Route::post('/messages', [HomeController::class, 'store'])->name('messages.store');
+    Route::get('/messages/{property_id}', [HomeController::class, 'fetch'])->name('messages.fetch');
+
+
         Route::post('user-contact-message', [ContactController::class, 'messageForUser'])->name('user.contact.message');
 
         Route::get('/download-listing-file/{file}', [HomeController::class, 'downloadListingFile'])->name('download-listing-file');

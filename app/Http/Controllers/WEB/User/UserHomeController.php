@@ -74,12 +74,18 @@ class UserHomeController extends Controller
         try {
             $user = Auth::guard('web')->user();
 
+            if ($request->hasFile('file')) {
+                $file = $request->file('file');
+                $filename = time() . '.' . $file->getClientOriginalExtension();
+                $file->move(public_path('uploads'), $filename);
+            }
 
             UserChat::create([
                 'message' => $request->msg,
                 'landlord_id' => $user->id,
                 'tenant_id' => $request->tenantid,
                 'send_to' => 'tenant',
+                'file_name' => $filename ?? null,
             ]);
             return json_encode(['status' => 'ok']);
         } catch (Exception $e) {

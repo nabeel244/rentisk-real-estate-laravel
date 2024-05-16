@@ -331,23 +331,15 @@
                                 </div>
                             </div>
                             <div class="card-body msg_card_body">
-                                {{-- <div class="d-flex justify-content-start mb-4">
-                                    <div class="msg_cotainer">
-                                        Hi, how are you samim?
-                                    </div>
-                                </div>
-                                <div class="d-flex justify-content-end mb-4">
-                                    <div class="msg_cotainer_send">
-                                        Hi Khalid i am good tnx how about you?
-                                    </div>
-                                </div> --}}
+                              
                                 <div id="landlordmsg"></div>
                             </div>
                             <div class="card-footer">
                                 <div class="input-group">
 
                                     <textarea name="" id="sendwritetext" class="form-control type_msg" placeholder="Type your message..."></textarea>
-
+                                    <input type="file" id="sendfile" style="display: none;">
+    <label for="sendfile" class="btn btn-primary">Attach Contract</label>
                                 </div>
                             </div>
 
@@ -373,90 +365,162 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
-        // var propertyslug = $("#getslug").val();
-        $("#sendwritetext").on('keydown', function(e) {
-            if (e.keyCode == 13) {
-                console.log()
-                var tenantid = $("#getuserid").val();
-                var usermesg = $(this).val();
-                $.ajax({
-                    type: 'POST'
-                    , url: "{{ route('user.tenantajaxRequest.post') }}"
-                    , data: {
-                        "_token": "{{ csrf_token() }}"
-                        , msg: usermesg
-                        , tenantid: tenantid
-                    }
-                    , success: function(data) {
-                        $("#sendwritetext").val('');
 
-                        getlatestchat(tenantid);
+        $("#sendwritetext").on('keydown', function(e) {
+        if (e.keyCode == 13) {
+            e.preventDefault(); // Prevent the default action to stop form submission
+            sendMessageAndFile();
+        }
+    });
+
+    // Handle file selection and sending the file immediately
+    $("#sendfile").on('change', function() {
+        sendMessageAndFile();
+    });
+    function sendMessageAndFile() {
+    var tenantid = $("#getuserid").val();
+    var usermesg = $("#sendwritetext").val();
+    var fileData = $('#sendfile').prop('files')[0]; // Get the file from input
+
+    var formData = new FormData();
+    formData.append('_token', '{{ csrf_token() }}');
+    formData.append('msg', usermesg);
+    formData.append('tenantid', tenantid);
+    if (fileData) { // Check if there is a file selected
+        formData.append('file', fileData);
+    }
+
+    $.ajax({
+        type: 'POST',
+        url: "{{ route('user.tenantajaxRequest.post') }}",
+        data: formData,
+        contentType: false, // Necessary for 'FormData'
+        processData: false, // Necessary for 'FormData'
+        success: function(data) {
+            $("#sendwritetext").val(''); // Clear the text input
+            $('#sendfile').val(''); // Clear the file input
+            getlatestchat(tenantid); // Refresh chat
+        },
+        error: function() {
+            console.log('Failed to send message or file');
+        }
+    });
+}
+        // $("#sendwritetext").on('keydown', function(e) {
+        //     if (e.keyCode == 13) {
+        //         console.log()
+        //         var tenantid = $("#getuserid").val();
+        //         var usermesg = $(this).val();
+        //         $.ajax({
+        //             type: 'POST'
+        //             , url: "{{ route('user.tenantajaxRequest.post') }}"
+        //             , data: {
+        //                 "_token": "{{ csrf_token() }}"
+        //                 , msg: usermesg
+        //                 , tenantid: tenantid
+        //             }
+        //             , success: function(data) {
+        //                 $("#sendwritetext").val('');
+
+        //                 getlatestchat(tenantid);
+        //             }
+        //         });
+        //     }
+
+        // });
+        const interval = setInterval(function() {
+    var tenantid = $("#getuserid").val();
+    getlatestchat(tenantid);
+}, 10000);
+
+function getlatestchat(tenantid) {
+    $.ajax({
+        type: 'POST',
+        url: "{{ route('user.get.latest.chat.of.tenant') }}",
+        data: {
+            "_token": "{{ csrf_token() }}",
+            tenantid: tenantid
+        },
+        success: function(data) {
+            if (data) {
+                $("#landlordmsg").empty(); // Clear the messages div before appending new data
+                $.each(data, function(index, chatItem) {
+                    var messageContent = chatItem.message ? chatItem.message : ""; // Check for null message
+                    var fileLink = chatItem.file_name ? '<a href="/uploads/' + chatItem.file_name + '">View File</a><br>' : '';
+
+                    var landlordchatBox;
+                    if (chatItem.send_to == 'landlord') {
+                        landlordchatBox = $('<div class="d-flex justify-content-start mb-4">' +
+                                            '<div class="msg_cotainer">' +
+                                            fileLink + // Append file link if available
+                                            messageContent + // Append message content
+                                            '</div>' +
+                                            '</div>');
+                    } else {
+                        landlordchatBox = $('<div class="d-flex justify-content-end mb-4">' +
+                                            '<div class="msg_cotainer_send">' +
+                                            fileLink + // Append file link if available
+                                            messageContent + // Append message content
+                                            '</div>' +
+                                            '</div>');
                     }
+                    $("#landlordmsg").append(landlordchatBox);
                 });
             }
-
-        });
-
-        function getlatestchat(tenantid) {
-            $.ajax({
-                type: 'POST'
-                , url: "{{ route('user.get.latest.chat.of.tenant') }}"
-                , data: {
-                    "_token": "{{ csrf_token() }}"
-                    , tenantid: tenantid
-                }
-                , success: function(data) {
-                    if (data) {
-                        $.each(data, function(index, chatItem) {
-
-                            var landlordchatBox;
-                            if (chatItem.send_to == 'landlord') {
-                                landlordchatBox = $('<div class="d-flex justify-content-start mb-4">' +
-                                    '<div class="msg_cotainer">' +
-                                    chatItem.message +
-                                    '</div>' +
-                                    '</div>');
-
-
-                                // landlordchatBox = $('<div class="media media-chat media-chat-reverse" style="display: flex">' +
-                                //     '<div class="media-body">' +
-                                //     '<p>' + chatItem.message + '</p>' +
-                                //     '</div>' +
-                                //     '</div>');
-
-                            } else {
-                                landlordchatBox = $('<div class="d-flex justify-content-end mb-4">' +
-                                    '<div class="msg_cotainer_send">' +
-                                    chatItem.message +
-                                    '</div>' +
-                                    '</div>');
-
-                                // landlordchatBox = $('<div class="media media-chat">' +
-                                //     '<div class="media-body">' +
-                                //     '<p>' + chatItem.message + '</p>' +
-                                //     '</div>' +
-                                //     '</div>');
-
-                            }
-                            $("#landlordmsg").append(landlordchatBox);
-
-                        })
-
-                    } else {
-
-                    }
-
-
-                }
-            });
-
+        },
+        error: function() {
+            console.log('Error fetching chat data');
         }
-        const interval = setInterval(function() {
-            var tenantid = $("#getuserid").val();
-            $("#landlordmsg").load(location.href + " #landlordmsg>*", "");
-            // $('#landlordmsg div').empty('');
-            getlatestchat(tenantid)
-        }, 30000);
+    });
+}
+
+
+        // function getlatestchat(tenantid) {
+        //     $.ajax({
+        //         type: 'POST'
+        //         , url: "{{ route('user.get.latest.chat.of.tenant') }}"
+        //         , data: {
+        //             "_token": "{{ csrf_token() }}"
+        //             , tenantid: tenantid
+        //         }
+        //         , success: function(data) {
+        //             if (data) {
+        //                 $.each(data, function(index, chatItem) {
+
+        //                     var landlordchatBox;
+        //                     if (chatItem.send_to == 'landlord') {
+        //                         landlordchatBox = $('<div class="d-flex justify-content-start mb-4">' +
+        //                             '<div class="msg_cotainer">' +
+        //                             chatItem.message +
+        //                             '</div>' +
+        //                             '</div>');
+
+        //                     } else {
+        //                         landlordchatBox = $('<div class="d-flex justify-content-end mb-4">' +
+        //                             '<div class="msg_cotainer_send">' +
+        //                             chatItem.message +
+        //                             '</div>' +
+        //                             '</div>');
+        //                     }
+        //                     $("#landlordmsg").append(landlordchatBox);
+
+        //                 })
+
+        //             } else {
+
+        //             }
+
+
+        //         }
+        //     });
+
+        // }
+        // const interval = setInterval(function() {
+        //     var tenantid = $("#getuserid").val();
+        //     $("#landlordmsg").load(location.href + " #landlordmsg>*", "");
+        //     // $('#landlordmsg div').empty('');
+        //     getlatestchat(tenantid)
+        // }, 30000);
     });
 
 </script>

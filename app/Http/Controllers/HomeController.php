@@ -30,6 +30,7 @@ use App\Models\BannerImage;
 use App\Models\PopularPost;
 use App\Models\FacebookComment;
 use App\Models\ContactPage;
+use App\Models\UserMessage;
 
 
 use App\Models\CustomPage;
@@ -966,6 +967,52 @@ class HomeController extends Controller
         // Handle your callback logic here
     }
 
+    public function store(Request $request)
+    {
+
+        // \Log::info($request->all());
+
+        // $request->validate([
+        //     'message' => 'required',
+        //     'property_id' => 'required',
+        //     // 'owner_id' => 'required'
+        // ]);
+        //    dd($request->all());
+        $userId = Auth::guard('tenant')->user()->id;
+        $propertyId = (int) $request->property_id;
+
+        $property = Property::find($propertyId);
+        if (!$property) {
+            return response()->json(['error' => 'Property not found'], 404);
+        }
+
+        $receiverId = $property->admin_id ? $property->admin_id : $property->user_id;
+
+        if (!$receiverId) {
+            return response()->json(['error' => 'Receiver ID could not be determined'], 400);
+        }
+        // dd($receiverId, $userId, $propertyId, $request->message);
+       
+        $message = UserMessage::create([
+            'message' => $request->message,
+            'sender_id' => $userId,
+            'receiver_id' => 56,
+            'property_id' => $propertyId
+        ]);
+
+        return response()->json($message->load('sender'));
+    }
+
+    public function fetch($property_id)
+    {
+        $messages = UserMessage::where('property_id', $property_id)
+                           ->with(['sender', 'receiver'])
+                           ->orderBy('created_at', 'desc')
+                           ->get();
+
+        return response()->json($messages);
+    }
+
     public function sendMSG(Request $request)
     {
         try {
@@ -974,24 +1021,38 @@ class HomeController extends Controller
 
             $property = Property::with('user')->where('slug', $request->slug)->first();
             // dd($property->id, $property->user, $getTenantId);
+            $landlordid  = 56;
+
+              // Handle file upload
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
+            $filename = time() . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('uploads'), $filename);
+        }
 
             UserChat::create([
                 'message' => $request->msg,
                 'tenant_id' => $getTenantId,
-                'landlord_id' => $property->user->id,
+                // 'landlord_id' => $property->user->id,
+                'landlord_id' => $landlordid,
                 'send_to' => 'landlord',
+                'file_name' => $filename ?? null,
             ]);
             return json_encode(['status' => 'ok']);
         } catch (Exception $e) {
+            return response()->json(['error' => $e->getMessage()]);
             return json_encode(['status' => 'error']);
         }
     }
 
     public function getChat(Request $request)
     {
+        // return response()->json(Auth::guard('tenant')->user());
         $getTenantId = Auth::guard('tenant')->user()->id;
         $property = Property::with('user')->where('slug', $request->slug)->first();
-        $landlordid  = $property->user->id;
+        // $landlordid  = $property->user->id;
+        $landlordid  = 56;
+        
         // $getchat =  UserChat::where('from_user', $getTenantId)->where('to_user', $property->user->id)->get()->toArray();
         // $getchat =  UserChat::where(function ($query) use ($getTenantId, $landlordid) {
         //     $query->where('from_user', $getTenantId)->where('to_user', $landlordid)
@@ -999,7 +1060,7 @@ class HomeController extends Controller
         // })->get()->toArray();
         $getchat =  UserChat::where('landlord_id', $landlordid)->where('tenant_id', $getTenantId)->get()->toArray();
 
-
+        // dd($getchat);
 
         return response()->json($getchat);
     }

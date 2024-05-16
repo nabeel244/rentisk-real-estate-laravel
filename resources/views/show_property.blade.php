@@ -314,6 +314,48 @@
         color: #48b0f7 !important;
     }
 
+    /* Chat box container */
+.chat-container {
+    height: 300px;
+    overflow-y: scroll;
+    border: 1px solid #ccc;
+    padding: 10px;
+    background-color: #f9f9f9; /* Light grey background */
+}
+
+/* Message input area */
+.message-input {
+    width: calc(100% - 70px); /* Adjusting width to leave space for the send button */
+    margin-top: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: vertical; /* Allowing vertical resizing of textarea */
+}
+
+/* Send button */
+.send-button {
+    width: 60px;
+    margin-top: 10px;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff; /* Blue color */
+    color: #fff; /* White text color */
+    cursor: pointer;
+}
+
+/* Send button hover effect */
+.send-button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+
+/* Send button disabled state */
+.send-button:disabled {
+    background-color: #ccc; /* Grey background when disabled */
+    cursor: not-allowed; /* Show disabled cursor */
+}
+
 </style>
 @section('title')
 <title>{{ $property->seo_title }}</title>
@@ -777,114 +819,54 @@
                              <a class="mail" href="mailto:{{ $property->admin->email }}"><i class="fal fa-envelope-open"></i> {{ $property->admin->email }}</a>
                     </div>
                 @else
-                    <div class="wsus__sidebar_message_top">
+                    <!-- <div class="wsus__sidebar_message_top">
                         <img src="{{ $property->user->image ? url($property->user->image) : url($default_image) }}" alt="images" class="img-fluid img-thumbnail">
                         <a class="name" href="{{ route('agent.show',['user_type' => '2','user_name'=>$property->user->slug]) }}">{{ $property->user->name }}</a>
                         <a class="mail" href="mailto:{{ $property->user->email }}"><i class="fal fa-envelope-open"></i> {{ $property->user->email }}</a>
-                    </div>
+                    </div> -->
                 @endif
-                <form id="listingAuthContactForm">
-                    @csrf
-                    <div class="wsus__sidebar_input">
-                        <label>{{__('user.Name')}}</label>
-                        <input type="text" name="name">
-                    </div>
-                    <div class="wsus__sidebar_input">
-                        <label>{{__('user.Email')}}</label>
-                        <input type="email" name="email">
-                    </div>
-                    <div class="wsus__sidebar_input">
-                        <label>{{__('user.Phone')}}</label>
-                        <input type="text" name="phone">
-                    </div>
-                    <div class="wsus__sidebar_input">
-                        <label>{{__('user.Subject')}}</label>
-                        <input type="text" name="subject">
-                    </div>
-                    <div class="wsus__sidebar_input">
-                        <label>{{__('user.Description')}}</label>
-                        <textarea cols="3" rows="3" name="message"></textarea>
-                        <input type="hidden" name="user_type" value="{{ $property->user_type }}">
-                        @if ($property->user_type==1)
-                        <input type="hidden" name="admin_id" value="{{ $property->admin_id }}">
-                        @else
-                        <input type="hidden" name="user_id" value="{{ $property->user_id }}">
-                        @endif
-
-
-                        @if($recaptcha_setting->status==1)
-                        <p class="g-recaptcha mt-3" data-sitekey="{{ $recaptcha_setting->site_key }}"></p>
-                        @endif
-
-                    <button type="submit" id="listingAuthorContctBtn" class="common_btn"><i id="listcontact-spinner" class="loading-icon fa fa-spin fa-spinner d-none mr-5"></i> {{__('user.Send Message')}}</button>
-                    </div>
-
-                            </form>
+              
                         </div>
                     </div>
                     <div class="page-content page-container" id="page-content">
 
-                        <div class="card card-bordered">
-                            <div class="card-header">
-                                <h4 class="card-title"><strong>Chat</strong></h4>
-                            </div>
+<div class="card card-bordered">
+    <div class="card-header">
+        <h4 class="card-title"><strong>Chat</strong></h4>
+    </div>
 
 
-                            <d iv class="ps-container ps-theme-default ps-active-y" id="chat-content" style="overflow-y: scroll !important; height:400px !important;">
+    <div class="ps-container ps-theme-default ps-active-y" id="chat-content" style="overflow-y: scroll !important; height:400px !important;">
 
-                                <div id="landlordmsg"></div>
+        <div id="landlordmsg"></div>
+        <div class="ps-scrollbar-x-rail" style="left: 0px; bottom: 0px;">
+            <div class="ps-scrollbar-x" tabindex="0" style="left: 0px; width: 0px;"></div>
+        </div>
+        <div class="ps-scrollbar-y-rail" style="top: 0px; height: 0px; right: 2px;">
+            <div class="ps-scrollbar-y" tabindex="0" style="top: 0px; height: 2px;"></div>
+        </div>
+</div>
 
-                                {{-- <div class="media media-chat media-chat-reverse" style="display: flex">
-                                    <div class="media-body">
-                                        <p>Hiii, </p>
-                                    </div>
-                                </div>
-                                <div class="media media-chat media-chat-reverse">
-                                    <div class="media-body">
-                                        <p>Hiii</p>
-                                    </div>
-                                </div>
-                                <div class="media media-chat media-chat-reverse">
-                                    <div class="media-body">
-                                        <p>Hiii</p>
-                                    </div>
-                                </div> --}}
+<div class="publisher bt-1 border-light">
+    <img class="avatar avatar-xs" src="https://img.icons8.com/color/36/000000/administrator-male.png" alt="...">
+    <input class="publisher-input" id="sendwritetext" type="text" placeholder="Write something">
+    <input type="file" id="sendfile" style="display: none;">
+    <label for="sendfile" class="btn btn-primary btn-sm">Attach Contract</label>
+</div>
 
-                                {{-- <div class="media media-chat">
-                                    <div class="media-body">
-                                        <p>Hi</p>
-                                    </div>
-                                </div>
-
-
-                                <div class="media media-chat media-chat-reverse">
-                                    <div class="media-body">
-                                        <p>Long time no see! Tomorrow office. will be free on sunday.</p>
-                                    </div>
-                                </div> --}}
-
-
-                                <div class="ps-scrollbar-x-rail" style="left: 0px; bottom: 0px;">
-                                    <div class="ps-scrollbar-x" tabindex="0" style="left: 0px; width: 0px;"></div>
-                                </div>
-                                <div class="ps-scrollbar-y-rail" style="top: 0px; height: 0px; right: 2px;">
-                                    <div class="ps-scrollbar-y" tabindex="0" style="top: 0px; height: 2px;"></div>
-                                </div>
-                        </div>
-
-                        <div class="publisher bt-1 border-light">
-                            <img class="avatar avatar-xs" src="https://img.icons8.com/color/36/000000/administrator-male.png" alt="...">
-                            <input class="publisher-input" id="sendwritetext" type="text" placeholder="Write something">
-                            <span class="publisher-btn file-group">
-                                <i class="fa fa-paperclip file-browser"></i>
-                                <input type="file">
-                            </span>
-                            <a class="publisher-btn" href="#" data-abc="true"><i class="fa fa-smile"></i></a>
-                            <a class="publisher-btn text-info" href="#" data-abc="true"><i class="fa fa-paper-plane"></i></a>
-                        </div>
-
-                    </div>
-
+</div>
+                    <!-- <div class="chat-container">
+    <div id="chat-box" style="height: 300px; overflow-y: scroll; border: 1px solid #ccc; padding: 10px;">
+       
+    </div> -->
+    <!-- <form id="messageForm">
+        @csrf
+        <input type="hidden" name="property_id" value="{{ $property->id }}">
+        <input type="hidden" name="owner_id" value="{{ $property->user_id }}">
+        <textarea name="message" required placeholder="Type your message here..." style="width: 100%; margin-top: 10px;"></textarea>
+        <button type="submit" style="width: 100%; margin-top: 10px;">Send</button>
+    </form> -->
+<!-- </div> -->
 
 
                 </div>
@@ -1075,13 +1057,10 @@
 <script>
     (function($) {
         "use strict";
-
-
-
         $(document).ready(function() {
             const interval = setInterval(function() {
                 var getpropertyslug = $("#getslug").val();
-                $("#landlordmsg").load(location.href + " #landlordmsg>*", "");
+                // $("#landlordmsg").load(location.href + " #landlordmsg>*", "");
 
                 // $('#landlordmsg div').empty('');
                 getlatestchat(getpropertyslug)
@@ -1091,74 +1070,179 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
-            // var propertyslug = $("#getslug").val();
+            // // var propertyslug = $("#getslug").val();
             $("#sendwritetext").on('keydown', function(e) {
-                if (e.keyCode == 13) {
-                    console.log()
-                    var getpropertyslug = $("#getslug").val();
-                    var usermesg = $(this).val();
-                    $.ajax({
-                        type: 'POST'
-                        , url: "{{ route('ajaxRequest.post') }}"
-                        , data: {
-                            "_token": "{{ csrf_token() }}"
-                            , msg: usermesg
-                            , slug: getpropertyslug
-                        }
-                        , success: function(data) {
-                            $("#sendwritetext").val('');
+        if (e.keyCode == 13) {
+            e.preventDefault(); // Prevent default form submission
+            sendMessage();
+        }
+    });
 
-                            getlatestchat(getpropertyslug);
-                        }
-                    });
-                }
+    // Handle file selection and sending file
+    $("#sendfile").on('change', function() {
+        sendFile();
+    });
 
-            });
+    function sendMessage() {
+    var getpropertyslug = $("#getslug").val();
+    var usermesg = $("#sendwritetext").val();
+
+    if (usermesg.trim() !== '') { // Only send if there's a message
+        var formData = new FormData();
+        formData.append('msg', usermesg);
+        formData.append('slug', getpropertyslug);
+        formData.append('_token', '{{ csrf_token() }}');
+
+        $.ajax({
+            type: 'POST',
+            url: "{{ route('ajaxRequest.post') }}",
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function(data) {
+                $("#sendwritetext").val(''); // Clear the text input
+                getlatestchat(getpropertyslug); // Refresh chat
+            }
+        });
+    }
+}
+
+function sendFile() {
+    var getpropertyslug = $("#getslug").val();
+    var fileData = $('#sendfile').prop('files')[0]; // Get the selected file
+    var usermesg = $("#sendwritetext").val(); // Optionally get the message
+
+    var formData = new FormData();
+    formData.append('slug', getpropertyslug);
+    formData.append('file', fileData);
+    formData.append('_token', '{{ csrf_token() }}');
+    if (usermesg.trim() !== '') { // Append the message if there is one
+        formData.append('msg', usermesg);
+    }
+
+    $.ajax({
+        type: 'POST',
+        url: "{{ route('ajaxRequest.post') }}",
+        data: formData,
+        contentType: false, // Necessary for 'FormData'
+        processData: false, // Necessary for 'FormData'
+        success: function(data) {
+            $("#sendwritetext").val(''); // Clear the text input
+            $('#sendfile').val(''); // Clear the file input
+            getlatestchat(getpropertyslug); // Refresh chat
+        }
+    });
+}
+
+            // $("#sendwritetext").on('keydown', function(e) {
+            //     if (e.keyCode == 13) {
+            //         var getpropertyslug = $("#getslug").val();
+            //         var usermesg = $(this).val();
+            //         $.ajax({
+            //             type: 'POST'
+            //             , url: "{{ route('ajaxRequest.post') }}"
+            //             , data: {
+            //                 "_token": "{{ csrf_token() }}"
+            //                 , msg: usermesg
+            //                 , slug: getpropertyslug
+            //             }
+            //             , success: function(data) {
+            //                 $("#sendwritetext").val('');
+
+            //                 getlatestchat(getpropertyslug);
+            //             }
+            //         });
+            //     }
+
+            // });
 
             function getlatestchat(propertyslug) {
-                $.ajax({
-                    type: 'POST'
-                    , url: "{{ route('get.latest.chat') }}"
-                    , data: {
-                        "_token": "{{ csrf_token() }}"
-                        , slug: propertyslug
-                    }
-                    , success: function(data) {
-                        if (data) {
-                            $.each(data, function(index, chatItem) {
+    $.ajax({
+        type: 'POST',
+        url: "{{ route('get.latest.chat') }}",
+        data: {
+            "_token": "{{ csrf_token() }}",
+            slug: propertyslug
+        },
+        success: function(data) {
+            if (data) {
+                $("#landlordmsg").empty(); // Clear the messages div before appending new data to prevent duplicates
+                $.each(data, function(index, chatItem) {
+                    var landlordchatBox;
 
-                                var landlordchatBox;
-                                if (chatItem.send_to == 'tenant') {
-
-
-                                    landlordchatBox = $('<div class="media media-chat">' +
-                                        '<div class="media-body">' +
-                                        '<p>' + chatItem.message + '</p>' +
-                                        '</div>' +
+                    // Determine message direction
+                    var chatDirection = chatItem.send_to == 'tenant' ? 'media-chat' : 'media-chat media-chat-reverse';
+                    
+                    // Create the base chat box
+                    landlordchatBox = $('<div class="media ' + chatDirection + '" style="display: flex">' +
+                                        '<div class="media-body"></div>' +
                                         '</div>');
 
-                                } else {
-
-                                    landlordchatBox = $('<div class="media media-chat media-chat-reverse" style="display: flex">' +
-                                        '<div class="media-body">' +
-                                        '<p>' + chatItem.message + '</p>' +
-                                        '</div>' +
-                                        '</div>');
-
-                                }
-                                $("#landlordmsg").append(landlordchatBox);
-
-                            })
-
-                        } else {
-
-                        }
-
-
+                    // Check if there's a file
+                    if (chatItem.file_name) {
+                        // Append a link to the file if it exists
+                        var fileLink = $('<a>').attr('href', '/uploads/' + chatItem.file_name).text('Contract File');
+                        landlordchatBox.find('.media-body').append(fileLink);
                     }
+
+                    // Add message text if available
+                    if (chatItem.message) {
+                        landlordchatBox.find('.media-body').append('<p>' + chatItem.message + '</p>');
+                    }
+
+                    $("#landlordmsg").append(landlordchatBox);
                 });
-
             }
+        },
+        error: function() {
+            console.log('Error fetching chat data');
+        }
+    });
+}
+            // function getlatestchat(propertyslug) {
+            //     $.ajax({
+            //         type: 'POST'
+            //         , url: "{{ route('get.latest.chat') }}"
+            //         , data: {
+            //             "_token": "{{ csrf_token() }}"
+            //             , slug: propertyslug
+            //         }
+            //         , success: function(data) {
+            //             if (data) {
+            //                 $.each(data, function(index, chatItem) {
+
+            //                     var landlordchatBox;
+            //                     if (chatItem.send_to == 'tenant') {
+
+
+            //                         landlordchatBox = $('<div class="media media-chat">' +
+            //                             '<div class="media-body">' +
+            //                             '<p>' + chatItem.message + '</p>' +
+            //                             '</div>' +
+            //                             '</div>');
+
+            //                     } else {
+
+            //                         landlordchatBox = $('<div class="media media-chat media-chat-reverse" style="display: flex">' +
+            //                             '<div class="media-body">' +
+            //                             '<p>' + chatItem.message + '</p>' +
+            //                             '</div>' +
+            //                             '</div>');
+
+            //                     }
+            //                     $("#landlordmsg").append(landlordchatBox);
+
+            //                 })
+
+            //             } else {
+
+            //             }
+
+
+            //         }
+            //     });
+
+            // }
 
             $("#listingAuthorContctBtn").on('click', function(e) {
                 e.preventDefault();
@@ -1253,9 +1337,10 @@
 
                 });
 
+});
 
-            })
         });
+
 
     })(jQuery);
 
