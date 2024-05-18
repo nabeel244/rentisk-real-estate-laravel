@@ -74,13 +74,13 @@
                         var code = $('#translateAll').data('code');
                         var file = $('#translateAll').data('file');
 
-                        if (isDemo == 0) {
-                            instance.hide({
-                                transitionOut: 'fadeOut'
-                            }, toast, 'button');
-                            toastr.error('This Is Demo Version. You Can Not Change Anything');
-                            return;
-                        }
+                        // if (isDemo == 0) {
+                        //     instance.hide({
+                        //         transitionOut: 'fadeOut'
+                        //     }, toast, 'button');
+                        //     toastr.error('This Is Demo Version. You Can Not Change Anything');
+                        //     return;
+                        // }
 
                         $.ajax({
                             type: "post",

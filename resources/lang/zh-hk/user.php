@@ -2,7 +2,7 @@
  return array (
   'Client Reviews' => 'Client Reviews',
   'Create Property' => 'Create Property',
-  'All Properties' => 'All Properties',
+  'All Properties' => 'All Propertiessssss',
   'Basic Information' => 'Basic Information',
   'Title' => 'Title',
   'Slug' => 'Slug',
@@ -12,7 +12,7 @@
   'Select City' => 'Select City',
   'Address' => 'Address',
   'Phone' => 'Phone',
-  'Email' => 'Email',
+  'Email' => 'Emailss',
   'Website' => 'Website',
   'Purpose' => 'Purpose',
   'Price' => 'Price',

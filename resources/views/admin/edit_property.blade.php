@@ -563,10 +563,10 @@
         function deleteSliderImg(id){
 
             var isDemo = "{{ env('PROJECT_MODE') }}"
-            if(isDemo == 0){
-                toastr.error('This Is Demo Version. You Can Not Change Anything');
-                return;
-            }
+            // if(isDemo == 0){
+            //     toastr.error('This Is Demo Version. You Can Not Change Anything');
+            //     return;
+            // }
 
             $.ajax({
                 type: 'GET',
@@ -586,10 +586,10 @@
         function deletePdfFile(id){
 
             var isDemo = "{{ env('PROJECT_MODE') }}"
-            if(isDemo == 0){
-                toastr.error('This Is Demo Version. You Can Not Change Anything');
-                return;
-            }
+            // if(isDemo == 0){
+            //     toastr.error('This Is Demo Version. You Can Not Change Anything');
+            //     return;
+            // }
 
             $.ajax({
                 type: 'GET',
@@ -610,10 +610,10 @@
         function existNearestLocation(id){
 
             var isDemo = "{{ env('PROJECT_MODE') }}"
-            if(isDemo == 0){
-                toastr.error('This Is Demo Version. You Can Not Change Anything');
-                return;
-            }
+            // if(isDemo == 0){
+            //     toastr.error('This Is Demo Version. You Can Not Change Anything');
+            //     return;
+            // }
 
             $.ajax({
                 type: 'GET',

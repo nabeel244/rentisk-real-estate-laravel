@@ -210,17 +210,17 @@
 
         })
 
-        $("#registerFormSubmit").on('submit',function(e) {
+        $("#registerFormSubmit").on('submit',function(e) { 
             e.preventDefault();
             console.log('hiu');
 
                 // project demo mode check
-                var isDemo="{{ env('PROJECT_MODE') }}"
-                var demoNotify="{{ env('NOTIFY_TEXT') }}"
-                if(isDemo==0){
-                    toastr.error(demoNotify);
-                    return;
-                }
+                // var isDemo="{{ env('PROJECT_MODE') }}"
+                // var demoNotify="{{ env('NOTIFY_TEXT') }}"
+                // if(isDemo==0){
+                //     toastr.error(demoNotify);
+                //     return;
+                // }
                 // end
             $("#reg-spinner").removeClass('d-none')
             $("#registerBtn").addClass('custom-opacity')

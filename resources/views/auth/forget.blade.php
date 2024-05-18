@@ -85,10 +85,10 @@
                 // project demo mode check
                 var isDemo="{{ env('PROJECT_MODE') }}"
                 var demoNotify="{{ env('NOTIFY_TEXT') }}"
-                if(isDemo==0){
-                    toastr.error(demoNotify);
-                    return;
-                }
+                // if(isDemo==0){
+                //     toastr.error(demoNotify);
+                //     return;
+                // }
                 // end
 
             $("#forg-spinner").removeClass('d-none')

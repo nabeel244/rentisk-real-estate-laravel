@@ -32,7 +32,7 @@ class PropertyController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth:web');
+        // $this->middleware('auth:web');
     }
 
     public function index()
@@ -49,8 +49,9 @@ class PropertyController extends Controller
     public function create()
     {
 
-        $user=Auth::guard('web')->user();
-        $order=Order::where(['user_id'=>$user->id,'status'=>1])->first();
+        $user=Auth::user();
+        // $order=Order::where(['user_id'=>$user->id,'status'=>1])->first();
+        $order=Order::where(['status'=>1])->first();
         if(!$order){
             $notification = trans('user_validation.Something Went Wrong');
             $notification=array('messege'=>$notification,'alert-type'=>'error');
